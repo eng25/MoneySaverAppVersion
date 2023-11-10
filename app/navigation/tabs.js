@@ -7,6 +7,7 @@ const tab = createBottomTabNavigator();
 
 const tabs = () => {
   return (
+
     <tab.Navigator>
       <tab.Screen name="Home" component={HomeScreen} />
       <tab.Screen name="Expense" component={ExpenseScreen} />
@@ -16,4 +17,6 @@ const tabs = () => {
 
   );
 };
+
+  
 export default tabs;
