@@ -15,18 +15,19 @@ const HomeScreen = ({ navigation }) => {
       'Delete Item',
       'Are you sure you want to delete this item?',
       [
-        { text: 'Cancel', style: 'cancel' },
         { text: 'Yes', onPress: () => setItems((prevItems) => prevItems.filter((item) => item.id !== id)) },
+        { text: 'Cancel', style: 'cancel' },
       ],
-      { cancelable: false }
+      { cancelable: false}
     );
   };
 
   return (
     <View style={styles.container}>
-      <Text style={styles.userName}>Welcome {name}!</Text>
+      <Text style={styles.header2}>Notifications</Text>
+      <Text style={styles.welcome}>Welcome {name}!</Text>
       <FlatList
-        data={items}
+        data={items} 
         renderItem={({ item }) => (
           <View style={styles.listItem}>
             <Text style={styles.item}>{item.title}</Text>
@@ -59,9 +60,16 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     backgroundColor: '#ffffff',
   },
-  userName: {
+  header2: {
+    alignSelf: 'flex-start',
+    fontSize: 22,
+    fontWeight: 'bold',
+    marginBottom: 10, 
+  },
+  welcome: {
     fontSize: 18,
     marginTop: 10,
+    fontWeight: '300',
   },
   listItem: {
     flexDirection: 'row',
@@ -72,6 +80,7 @@ const styles = StyleSheet.create({
     borderBottomColor: '#dddddd',
   },
   item: {
+    fontWeight: 'normal',
     fontSize: 18,
   },
   optionsButton: {
@@ -88,7 +97,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     padding: 10,
     borderRadius: 5,
-    marginVertical: 20, 
+    marginVertical: 20,
     paddingHorizontal: 20,
     backgroundColor: 'white',
   },
