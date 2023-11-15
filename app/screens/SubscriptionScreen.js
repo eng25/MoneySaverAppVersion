@@ -17,6 +17,7 @@ import {
       const [subscriptionName, setSubscriptionName] = useState('');
       const [cost, setCost] = useState('');
       const [paymentDate, setPaymentDate] = useState('');
+      const [searchQuery, setSearchQuery] = useState('');
   
       useEffect(() => {
           // Sort subscriptions
@@ -82,93 +83,181 @@ import {
       const closeModal = () => {
           setModalVisible(false);
       };
+
+      const filteredSubscriptions = subscriptions.filter(subscription =>
+        subscription.name.toLowerCase().includes(searchQuery.toLowerCase())
+      );
   
       return (
-          <View style={styles.container}>
-              <View style={styles.header}>
-                  <Text style={styles.title}>Subscriptions</Text>
-                  <TouchableOpacity
-                      onPress={() => setModalVisible(true)}
-                      style={styles.addButton}
-                  >
-                      <Ionicons name="add-circle" size={35} color="#4169E1" />
-                  </TouchableOpacity>
-              </View>
-              {/* <FlatList
-                  data={subscriptions}
-                  keyExtractor={(item) => item.id}
-                  renderItem={({ item }) => (
-                      <View style={styles.subscriptionItem}>
-                          {item.logo && <Image source={item.logo} style={styles.logo} />}
-                          <View style={styles.subscriptionTextContainer}>
-                              <Text style={styles.paymentDateText}>Due: {item.paymentDate}</Text>
-                              <Text style={styles.subscriptionNameText}>{item.name}</Text>
-                              <Text style={styles.costText}>${item.cost}</Text>
-                          </View>
-                      </View>
-                        //     <TouchableOpacity onPress={() => handleDeleteSubscription(item.id)} style={styles.optionsButton}>
-                        //     <Text style={styles.optionsText}>...</Text>
-                        // </TouchableOpacity>
-                  )}
-              /> */}
-             <FlatList
-                data={subscriptions}
-                keyExtractor={(item) => item.id}
-                renderItem={({ item }) => (
-                    <View style={styles.subscriptionItem}>
-                        {item.logo && <Image source={item.logo} style={styles.logo} />}
-                        <View style={styles.subscriptionTextContainer}>
-                            <Text style={styles.paymentDateText}>Due: {item.paymentDate}</Text>
-                            <Text style={styles.subscriptionNameText}>{item.name}</Text>
-                            <Text style={styles.costText}>${item.cost}</Text>
-                        </View>
-                        <TouchableOpacity onPress={() => handleDeleteSubscription(item.id)} style={styles.optionsButton}>
-                            <Text style={styles.optionsText}>...</Text>
-                        </TouchableOpacity>
-                    </View>
-                )}
-            />
-              
-              <Modal
-                  animationType="slide"
-                  transparent={true}
-                  visible={modalVisible}
-                  onRequestClose={closeModal}
-              >
-                  <View style={styles.modalView}>
-                      <View style={styles.modalHeader}>
-                          <Text style={styles.modalTitle}>Subscription Form</Text>
-                          <TouchableOpacity onPress={closeModal} style={styles.closeButton}>
-                              <Ionicons name="close-circle" size={35} color="red" />
-                          </TouchableOpacity>
-                      </View>
-                      <TextInput
-                          placeholder="Subscription Name"
-                          value={subscriptionName}
-                          onChangeText={setSubscriptionName}
-                          style={styles.input}
-                      />
-                      <TextInput
-                          placeholder="Cost"
-                          value={cost}
-                          onChangeText={setCost}
-                          keyboardType="numeric"
-                          style={styles.input}
-                      />
-                      <TextInput
-                          placeholder="Payment Date (e.g., 2023-09-15)"
-                          value={paymentDate}
-                          onChangeText={setPaymentDate}
-                          style={styles.input}
-                      />
-                      <Button
-                          title="Add Subscription"
-                          onPress={handleAddSubscription}
-                      />
-                  </View>
-              </Modal>
+        <View style={styles.container}>
+          <View style={styles.header}>
+            <Text style={styles.title}>Subscriptions</Text>
+            <TouchableOpacity
+              onPress={() => setModalVisible(true)}
+              style={styles.addButton}
+            >
+              <Ionicons name="add-circle" size={35} color="#4169E1" />
+            </TouchableOpacity>
           </View>
+      
+          <TextInput
+            placeholder="Search for Subscription"
+            value={searchQuery}
+            onChangeText={setSearchQuery}
+            style={styles.searchInput}
+          />
+      
+          <FlatList
+            data={filteredSubscriptions}
+            keyExtractor={(item) => item.id}
+            renderItem={({ item }) => (
+              <View style={styles.subscriptionItem}>
+                {item.logo && <Image source={item.logo} style={styles.logo} />}
+                <View style={styles.subscriptionTextContainer}>
+                  <Text style={styles.paymentDateText}>Due: {item.paymentDate}</Text>
+                  <Text style={styles.subscriptionNameText}>{item.name}</Text>
+                  <Text style={styles.costText}>${item.cost}</Text>
+                </View>
+                <TouchableOpacity onPress={() => handleDeleteSubscription(item.id)} style={styles.optionsButton}>
+                  <Text style={styles.optionsText}>...</Text>
+                </TouchableOpacity>
+              </View>
+            )}
+          />
+      
+          <Modal
+            animationType="slide"
+            transparent={true}
+            visible={modalVisible}
+            onRequestClose={closeModal}
+          >
+            <View style={styles.modalView}>
+              <View style={styles.modalHeader}>
+                <Text style={styles.modalTitle}>Subscription Form</Text>
+                <TouchableOpacity onPress={closeModal} style={styles.closeButton}>
+                  <Ionicons name="close-circle" size={35} color="red" />
+                </TouchableOpacity>
+              </View>
+              <TextInput
+                placeholder="Subscription Name"
+                value={subscriptionName}
+                onChangeText={setSubscriptionName}
+                style={styles.input}
+              />
+              <TextInput
+                placeholder="Cost"
+                value={cost}
+                onChangeText={setCost}
+                keyboardType="numeric"
+                style={styles.input}
+              />
+              <TextInput
+                placeholder="Payment Date (e.g., 2023-09-15)"
+                value={paymentDate}
+                onChangeText={setPaymentDate}
+                style={styles.input}
+              />
+              <Button
+                title="Add Subscription"
+                onPress={handleAddSubscription}
+              />
+            </View>
+          </Modal>
+        </View>
       );
+      
+    //   return (
+    //       <View style={styles.container}>
+    //           <View style={styles.header}>
+    //               <Text style={styles.title}>Subscriptions</Text>
+    //               <TouchableOpacity
+    //                   onPress={() => setModalVisible(true)}
+    //                   style={styles.addButton}
+    //               >
+    //                   <Ionicons name="add-circle" size={35} color="#4169E1" />
+    //               </TouchableOpacity>
+    //           </View>
+    //           <TextInput
+    //             placeholder="Search Subscriptions"
+    //             value={searchQuery}
+    //             onChangeText={setSearchQuery}
+    //             style={styles.searchInput}
+    //         />
+    //           {/* <FlatList
+    //               data={subscriptions}
+    //               keyExtractor={(item) => item.id}
+    //               renderItem={({ item }) => (
+    //                   <View style={styles.subscriptionItem}>
+    //                       {item.logo && <Image source={item.logo} style={styles.logo} />}
+    //                       <View style={styles.subscriptionTextContainer}>
+    //                           <Text style={styles.paymentDateText}>Due: {item.paymentDate}</Text>
+    //                           <Text style={styles.subscriptionNameText}>{item.name}</Text>
+    //                           <Text style={styles.costText}>${item.cost}</Text>
+    //                       </View>
+    //                   </View>
+    //                     //     <TouchableOpacity onPress={() => handleDeleteSubscription(item.id)} style={styles.optionsButton}>
+    //                     //     <Text style={styles.optionsText}>...</Text>
+    //                     // </TouchableOpacity>
+    //               )}
+    //           /> */}
+    //          <FlatList
+    //             data={subscriptions}
+    //             keyExtractor={(item) => item.id}
+    //             renderItem={({ item }) => (
+    //                 <View style={styles.subscriptionItem}>
+    //                     {item.logo && <Image source={item.logo} style={styles.logo} />}
+    //                     <View style={styles.subscriptionTextContainer}>
+    //                         <Text style={styles.paymentDateText}>Due: {item.paymentDate}</Text>
+    //                         <Text style={styles.subscriptionNameText}>{item.name}</Text>
+    //                         <Text style={styles.costText}>${item.cost}</Text>
+    //                     </View>
+    //                     <TouchableOpacity onPress={() => handleDeleteSubscription(item.id)} style={styles.optionsButton}>
+    //                         <Text style={styles.optionsText}>...</Text>
+    //                     </TouchableOpacity>
+    //                 </View>
+    //             )}
+    //         />
+              
+    //           <Modal
+    //               animationType="slide"
+    //               transparent={true}
+    //               visible={modalVisible}
+    //               onRequestClose={closeModal}
+    //           >
+    //               <View style={styles.modalView}>
+    //                   <View style={styles.modalHeader}>
+    //                       <Text style={styles.modalTitle}>Subscription Form</Text>
+    //                       <TouchableOpacity onPress={closeModal} style={styles.closeButton}>
+    //                           <Ionicons name="close-circle" size={35} color="red" />
+    //                       </TouchableOpacity>
+    //                   </View>
+    //                   <TextInput
+    //                       placeholder="Subscription Name"
+    //                       value={subscriptionName}
+    //                       onChangeText={setSubscriptionName}
+    //                       style={styles.input}
+    //                   />
+    //                   <TextInput
+    //                       placeholder="Cost"
+    //                       value={cost}
+    //                       onChangeText={setCost}
+    //                       keyboardType="numeric"
+    //                       style={styles.input}
+    //                   />
+    //                   <TextInput
+    //                       placeholder="Payment Date (e.g., 2023-09-15)"
+    //                       value={paymentDate}
+    //                       onChangeText={setPaymentDate}
+    //                       style={styles.input}
+    //                   />
+    //                   <Button
+    //                       title="Add Subscription"
+    //                       onPress={handleAddSubscription}
+    //                   />
+    //               </View>
+    //           </Modal>
+    //       </View>
+    //   );
   };
   
   const styles = StyleSheet.create({
@@ -271,6 +360,15 @@ import {
           fontWeight: 'bold',
           textAlign: 'center', // Center the text
           flex: 1, // Take up the available space
+      },
+      searchInput: {
+        height: 40,
+        borderWidth: 1,
+        padding: 10,
+        marginHorizontal: 16,
+        marginTop: 10,
+        marginBottom: 20,
+        borderRadius: 10,
       },
   });
   
