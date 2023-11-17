@@ -196,7 +196,6 @@ import {
           fontWeight: 'bold',
       },
       addButton: {
-          // Style for the button if needed
       },
       modalView: {
           margin: 20,
@@ -279,6 +278,5 @@ import {
         borderRadius: 10,
       },
   });
-  
+
   export default SubscriptionScreen;
-  
