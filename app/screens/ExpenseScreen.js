@@ -8,7 +8,7 @@ import { Ionicons } from '@expo/vector-icons';
 import coinLogo from '../assets/icons/coin.png';
 
 const ExpenseScreen = () => {
-  const [modalVisible, setModalVisible] = useState(false);
+  const [addModalVisible, setAddModalVisible] = useState(false);
   const [expenses, setExpenses] = useState([]);
   const [expenseName, setExpenseName] = useState('');
   const [amount, setAmount] = useState('');
@@ -23,20 +23,45 @@ const ExpenseScreen = () => {
     setExpenses(sortedExpenses);
   }, [expenses]);
 
-  const handleDeleteExpense = (id) => {
+  const handleEditOrDeleteExpense = (id) => {
     Alert.alert(
-      "Delete Expense",
-      "Are you sure you want to delete this expense?",
+      "Edit or Delete Expense",
+      "Do you want to edit or delete this expense?",
       [
         {
           text: "Cancel",
           style: "cancel"
         },
-        { 
-          text: "OK", onPress: () => {
-              setExpenses(currentExpenses => 
-                  currentExpenses.filter(expense => expense.id !== id)
-              );
+        {
+          text: "Edit",
+          onPress: () => {
+            // Implement your edit logic here
+            //handleEditExpense(id);
+            console.log("Edit expense with id:", id);
+          }
+        },
+        {
+          text: "Delete",
+          style: "destructive",
+          onPress: () => {
+            Alert.alert(
+              "Delete Expense",
+              "Are you sure you want to delete this expense?",
+              [
+                {
+                  text: "Cancel",
+                  style: "cancel"
+                },
+                {
+                  text: "OK",
+                  onPress: () => {
+                    setExpenses((currentExpenses) =>
+                      currentExpenses.filter((expense) => expense.id !== id)
+                    );
+                  }
+                }
+              ]
+            );
           }
         }
       ]
@@ -56,11 +81,11 @@ const ExpenseScreen = () => {
     setAmount('');
     setPaymentDate('');
     setSelectedImage(null);
-    setModalVisible(false);
+    setAddModalVisible(false);
   };
 
   const closeModal = () => {
-    setModalVisible(false);
+    setAddModalVisible(false);
   };
 
   const filteredExpenses = expenses.filter(expense =>
@@ -72,7 +97,7 @@ const ExpenseScreen = () => {
       <View style={styles.header}>
         <Text style={styles.title}>Expenses</Text>
         <TouchableOpacity
-          onPress={() => setModalVisible(true)}
+          onPress={() => setAddModalVisible(true)}
           style={styles.addButton}
         >
           <Ionicons name="add-circle" size={35} color="#4169E1" />
@@ -97,7 +122,7 @@ const ExpenseScreen = () => {
               <Text style={styles.expenseNameText}>{item.name}</Text>
               <Text style={styles.amountText}>${item.amount}</Text>
             </View>
-            <TouchableOpacity onPress={() => handleDeleteExpense(item.id)} style={styles.optionsButton}>
+            <TouchableOpacity onPress={() => handleEditOrDeleteExpense(item.id)} style={styles.optionsButton}>
               <Text style={styles.optionsText}>...</Text>
             </TouchableOpacity>
           </View>
@@ -107,7 +132,46 @@ const ExpenseScreen = () => {
       <Modal
         animationType="slide"
         transparent={true}
-        visible={modalVisible}
+        visible={addModalVisible}
+        onRequestClose={closeModal}
+      >
+        <View style={styles.modalView}>
+          <View style={styles.modalHeader}>
+            <Text style={styles.modalTitle}>Add Expense</Text>
+            <TouchableOpacity onPress={closeModal} style={styles.closeButton}>
+              <Ionicons name="close-circle" size={35} color="red" />
+            </TouchableOpacity>
+          </View>
+          <TextInput
+            placeholder="Expense Name"
+            value={expenseName}
+            onChangeText={setExpenseName}
+            style={styles.input}
+          />
+          <TextInput
+            placeholder="Amount"
+            value={amount}
+            onChangeText={setAmount}
+            keyboardType="numeric"
+            style={styles.input}
+          />
+          <TextInput
+            placeholder="Payment Date (e.g., 2023-09-15)"
+            value={paymentDate}
+            onChangeText={setPaymentDate}
+            style={styles.input}
+          />
+          {/* Add image selection logic here */}
+          <Button
+            title="Add Expense"
+            onPress={handleAddExpense}
+          />
+        </View>
+      </Modal>
+            <Modal
+        animationType="slide"
+        transparent={true}
+        visible={addModalVisible}
         onRequestClose={closeModal}
       >
         <View style={styles.modalView}>
